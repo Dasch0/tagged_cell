@@ -1,4 +1,4 @@
-//! Initializable & thread safe static variables, with zero performance overhead for reads
+//! Fast, initializable, and thread safe static variables
 //!
 //! Borrows the excellent ZST based tagging implementation (linked below) to guarantee the cell
 //! is initialized exactly once before an access is attempted.
