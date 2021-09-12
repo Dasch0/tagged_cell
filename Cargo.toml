@@ -9,7 +9,7 @@ readme = "README.md"
 documentation = "https://docs.rs/tagged_cell"
 
 repository = "https://github.com/dasch0/tagged_cell"
-keywords = ["lazy", "static", "tag", "zst", "once", "macro", "cell"]
+keywords = ["lazy", "static", "tag", "zst", "macro"]
 categories = ["rust-patterns", "memory-management"]
 
 license = "MIT OR Apache-2.0"
