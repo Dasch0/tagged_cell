@@ -1,9 +1,10 @@
 # tagged\_cell
-Fast, initializable, and thread safe static variables
-
 [![CI](https://github.com/Dasch0/tagged_cell/actions/workflows/rust.yml/badge.svg)](https://github.com/Dasch0/tagged_cell/actions/workflows/rust.yml)
 [![Crates.io](https://img.shields.io/crates/v/tagged_cell.svg)](https://crates.io/crates/tagged_cell)
 [![API reference](https://docs.rs/once_cell/badge.svg)](https://docs.rs/tagged_cell/)
+
+Fast, initializable, and thread safe static variables
+
 
 ## Overview
 Borrows the excellent ZST based tagging implementation (linked below) to guarantee the cell
