@@ -1,8 +1,8 @@
 [package]
 name = "tagged_cell"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["David Schwarz <dsdavidschwarz@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 description = "Fast, initializable, and thread safe static variables"
 readme = "README.md"
