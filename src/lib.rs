@@ -18,9 +18,9 @@ pub struct Init<Tag> {
 }
 
 impl<T, Tag> TaggedCell<T, Tag> {
-    /// Internal method to create an uninitialized cell. This is an implementation detail and
-    /// *should not* be called directly and thus is listed as unsafe. Use [tagged_cell!] instead
-    /// This must only be called once for each `Tag` type.
+    /// Internal method to create an uninitialized cell. This relies on the user to define a unique
+    /// 'Tag' type for each call to new, and and thus is listed as unsafe. Use [tagged_cell!] for
+    /// safe [TaggedCell] creation
     #[doc(hidden)]
     pub const unsafe fn new() -> Self {
         TaggedCell {
@@ -30,7 +30,7 @@ impl<T, Tag> TaggedCell<T, Tag> {
         }
     }
 
-    /// Initialize a TaggedOnceCell. This function initializes the cell, if not already
+    /// Initialize a TaggedCell. This function initializes the cell, if not already
     /// initialized, using the provided function or closure. Additionally returns a zero-sized Tag,
     /// which is required to access the underlying data.
     ///
@@ -50,8 +50,7 @@ impl<T, Tag> TaggedCell<T, Tag> {
         Init { tag: self.tag }
     }
 
-    /// Get the data within a [TaggedCell], requires an initialized tag to perform the access
-    #[inline(never)]
+    /// Get the data within a [TaggedCell], requires an tag (obtained via [TaggedCell::init]) to perform the access
     pub fn get(&self, _: Init<Tag>) -> &T {
         // SAFETY: Init tag proves that `init` has successfully
         // returned before in the current thread, initializing the cell.
@@ -64,19 +63,25 @@ impl<T, Tag> TaggedCell<T, Tag> {
 
 /// [TaggedCell] may be Sync. Guaranteed by ZST tag
 unsafe impl<T: Sync + Send, Tag> Sync for TaggedCell<T, Tag> {}
+
+/// [TaggedCell] may be Sync. Guaranteed by ZST tag
 unsafe impl<T: Send, Tag> Send for TaggedCell<T, Tag> {}
 
-/// Macro for creating a [TaggedCell]
+/// Safe macro for creating a [TaggedCell]
 #[macro_export]
 macro_rules! tagged_cell {
-    (static $name:ident : TaggedCell<$type:ty, _> = TaggedCell::new();) => {
+    (
+        $(#[$outer:meta])*
+        static $name:ident : TaggedCell<$type:ty, _> = TaggedCell::new();
+    ) => {
         #[allow(non_snake_case)]
         mod $name {
             #[allow(dead_code)]
             pub struct TagType;
         }
 
-        static $name: $crate::TaggedCell<$type, $name::TagType> = unsafe {$crate::TaggedCell::new()};
+        static $name: $crate::TaggedCell<$type, $name::TagType> =
+            unsafe { $crate::TaggedCell::new() };
     };
 }
 
@@ -85,6 +90,7 @@ mod tests {
     #[test]
     fn simple() {
         tagged_cell! {
+            /// test doc comments on tagged cell
             static TEST: TaggedCell<usize, _> = TaggedCell::new();
         }
 

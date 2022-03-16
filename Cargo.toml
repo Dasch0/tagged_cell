@@ -1,6 +1,6 @@
 [package]
 name = "tagged_cell"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["David Schwarz <dsdavidschwarz@gmail.com>"]
 edition = "2021"
 
